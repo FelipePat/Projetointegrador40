@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Banco gerado pelo seed
+*.db
+
+# Node / Vite
+node_modules/
+dist/
+.vite/
+
+# Sistema operacional
+.DS_Store
+Thumbs.db

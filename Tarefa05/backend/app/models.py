@@ -46,4 +46,7 @@ class Venda(Base):
     data_hora: Mapped[datetime] = mapped_column(DateTime, default=datetime.now)
     forma_pagamento: Mapped[str] = mapped_column(String, nullable=False)
     valor_bruto: Mapped[float] = mapped_column(Float, nullable=False)
+    valor_taxa: Mapped[float] = mapped_column(Float, nullable=False, default=0)
     valor_liquido: Mapped[float] = mapped_column(Float, nullable=False)
+    cmv: Mapped[float] = mapped_column(Float, nullable=False, default=0)
+    lucro: Mapped[float] = mapped_column(Float, nullable=False, default=0)

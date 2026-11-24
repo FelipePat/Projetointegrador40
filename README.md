@@ -1,147 +1,154 @@
-Micro-SaaS Gestão Alimentar
+# Micro-SaaS Gestão Alimentar
 
 Projeto Integrador: Desenvolvimento de Sistemas Orientado a Dispositivos Móveis e Baseados na Web
 
 Centro Universitário Senac — Senac EAD (2026) | Curso Superior de Tecnologia em Análise e Desenvolvimento de Sistemas — Grupo 40
 
-📋 Sobre o Projeto
+## 📋 Sobre o Projeto
 
-O Micro-SaaS Gestão Alimentar é uma aplicação web móvel (PWA) desenvolvida para simplificar a gestão operacional e financeira de microempreendimentos alimentícios (pequenas marmitarias, lanchonetes de bairro e food trucks).
+O Micro-SaaS Gestão Alimentar é uma aplicação web móvel (PWA) para simplificar a gestão operacional e financeira de microempreendimentos alimentícios (marmitarias, lanchonetes de bairro e food trucks).
 
-No dia a dia de operação intensa, microempreendedores frequentemente dependem de cadernos de anotação, comandas de papel ou planilhas complexas, o que gera falhas no fechamento de caixa, desperdício de insumos perecíveis e desconhecimento da margem de lucro real.
+O sistema substitui cadernos, comandas de papel e planilhas por um PDV mobile que registra vendas em poucos toques, debita automaticamente os insumos da ficha técnica e apura o lucro considerando as taxas dos meios de pagamento.
 
-🎯 Proposta de Valor
+### 🎯 Proposta de valor
 
-PDV Mobile Ultra-Ágil: Registro de vendas no balcão em poucos toques de tela, otimizado para smartphones.
+- **PDV Mobile Ultra-Ágil:** registro de vendas no balcão em poucos toques, otimizado para smartphones.
+- **Baixa Automática de Estoque:** ao confirmar a venda, os insumos vinculados à ficha técnica de cada produto são debitados em uma transação atômica.
+- **Apuração de Lucro Líquido Real:** dedução do CMV e das taxas de Pix, crédito, débito e dinheiro.
 
-Baixa Automática de Estoque: Cada produto possui uma Ficha Técnica vinculada aos seus ingredientes; ao confirmar uma venda, o sistema debita os insumos em tempo real.
+## 🛠️ Arquitetura e tecnologias
 
-Apuração de Lucro Líquido Real: Dedução automática do Custo de Mercadoria Vendida (CMV) e das taxas de maquininha/meios de pagamento (Pix, Crédito, Débito e Dinheiro) no fechamento diário.
+- **Frontend (Mobile Web App):** React + Vite + PWA, design mobile-first.
+- **Backend (API RESTful):** Python + FastAPI + Pydantic.
+- **Banco de dados:** SQLite via SQLAlchemy ORM.
 
-🛠️ Arquitetura e Tecnologias
+## ✅ Escopo entregue na PoC (2ª etapa)
 
-Frontend (Mobile Web App): React + Vite + Progressive Web App (PWA) com design mobile-first.
+Conforme o documento da 2ª entrega, o recorte estratégico foi a **Jornada 1 (Carla Martins — registro ágil de venda no balcão e baixa automática de estoque)**.
 
-Backend (API RESTful): Python + FastAPI + Pydantic.
+- [x] **Seed do banco** (`app/seed.py`): cria tabelas e popula insumos, produtos e fichas técnicas.
+- [x] **Catálogo e CMV:** `GET /produtos` calcula o custo de cada item pela ficha técnica.
+- [x] **Insumos e alertas:** `GET /insumos` retorna status VERDE / AMARELO / VERMELHO.
+- [x] **Taxas:** `GET /taxas` expõe os percentuais configurados no backend.
+- [x] **Registro de venda:** `POST /vendas` valida os itens, verifica estoque, debita insumos, grava a venda e calcula bruto, taxa, líquido, CMV e lucro em uma única transação.
+- [x] **PDV mobile:** catálogo touch, carrinho, contador, modal de pagamento (Pix, débito, crédito, dinheiro) e toast de confirmação.
+- [x] **Tela de Estoque:** listagem com badges coloridos, atualizada automaticamente após cada venda.
+- [x] **PWA:** manifest, ícones e service worker registrado.
+- [x] **Testes automatizados:** cobertura de vendas, baixa de estoque, rollback e validações (pytest).
 
-Banco de Dados: SQLite integrado via SQLAlchemy ORM (com transações atômicas ACID).
+### Taxas padrão
 
-✨ Funcionalidades Principais (MVP)
+| Meio de pagamento | Taxa |
+|---|---|
+| Pix | 0% |
+| Dinheiro | 0% |
+| Débito | 1% |
+| Crédito | 3% |
 
-[x] Autenticação e Taxas: Cadastro/Login (JWT) e configuração das taxas percentuais por meio de pagamento.
+Os percentuais estão centralizados em `Tarefa05/backend/app/services.py`.
 
-[x] Controle de Insumos: Cadastro de ingredientes com custo unitário, estoque atual, estoque mínimo e alertas visuais (Verde, Amarelo e Vermelho).
+## 🚧 Backlog (ainda não implementado)
 
-[x] Produtos e Ficha Técnica: Criação de itens do cardápio com cálculo automático do CMV unitário.
+Itens descritos na visão do produto/README anterior, mas **fora do recorte da PoC**:
 
-[x] PDV Rápido: Catálogo touch-friendly com seleção rápida de itens, escolha da forma de pagamento e confirmação instantânea.
+- [ ] **Jornada 2 — Fechamento de caixa:** dashboard diário com totais por forma de pagamento, CMV, taxas, lucro líquido, sugestão de reposição e confirmação de fechamento.
+- [ ] **Autenticação JWT** (cadastro/login) e telas administrativas de cadastro.
+- [ ] **Configuração de taxas via interface** (hoje os percentuais são constantes no backend).
+- [ ] **Cache offline no service worker** (hoje o app é instalável, mas não funciona sem rede).
+- [ ] **Capturas de tela e link do vídeo** a serem inseridos nos itens 4.3 e 4.4 do documento da 2ª entrega.
 
-[x] Fechamento de Caixa Diário: Consolidação de faturamento bruto, taxas descontadas, CMV acumulado e Lucro Líquido Real, além de lista sugerida de compras.
+## 📁 Estrutura do repositório
 
-📁 Estrutura do Repositório
+```text
+.
+├── Projeto_Integrador_2a_ Entrega_Grupo_40.docx   # Documento da 2ª entrega
+├── TAREFA05.zip                                   # Entrega original (T05)
+└── Tarefa05/
+    ├── backend/
+    │   ├── app/
+    │   │   ├── __init__.py
+    │   │   ├── database.py      # Engine SQLite e sessões
+    │   │   ├── main.py          # Endpoints da API
+    │   │   ├── models.py        # Insumo, Produto, FichaTecnica, Venda
+    │   │   ├── schemas.py       # Validação Pydantic
+    │   │   ├── seed.py          # Carga inicial do banco
+    │   │   └── services.py      # Taxas, CMV e lucro
+    │   ├── requirements.txt
+    │   ├── requirements-dev.txt       # Dependências dos testes
+    │   └── tests/test_vendas.py       # Testes das regras de negócio
+    └── frontend/
+        ├── public/              # manifest.json, ícones e service worker
+        ├── src/
+        │   ├── components/      # PDV e Estoque
+        │   ├── api.js           # Chamadas à API
+        │   ├── App.jsx          # Navegação e toast
+        │   ├── main.jsx
+        │   └── styles.css
+        ├── index.html
+        ├── package.json
+        └── vite.config.js
+```
 
-micro-saas-gestao-alimentar/
-├── backend/                  # API RESTful (Python + FastAPI + SQLAlchemy)
-│   ├── app/
-│   │   ├── models/           # Modelos relacionais (SQLite)
-│   │   ├── schemas/          # Validação de dados (Pydantic)
-│   │   ├── routes/           # Endpoints (auth, insumos, produtos, vendas, financeiro)
-│   │   ├── services/         # Regras de negócio (CMV, taxas e baixa de estoque)
-│   │   └── main.py           # Entrypoint da API
-│   └── requirements.txt
-│
-├── frontend/                 # Aplicação Mobile Web App (React + PWA)
-│   ├── public/               # manifest.json, ícones e service worker
-│   ├── src/
-│   │   ├── components/       # Componentes reutilizáveis (PDV, Badges, BottomNav)
-│   │   ├── pages/            # Telas (PDV, Estoque, Produtos, Fechamento)
-│   │   ├── services/         # Comunicação com a API REST
-│   │   └── App.jsx
-│   └── package.json
-│
-└── docs/                     # Documentação do Projeto Integrador (Entregas e Diagramas)
+## 🚀 Como executar localmente
 
+Pré-requisitos: **Python 3.10+** e **Node.js 18+** com npm.
 
-🚀 Como Executar o Projeto Localmente
+### 1. Backend (FastAPI)
 
-Pré-requisitos
-
-Python 3.10+
-
-Node.js 18+ e npm (ou yarn)
-
-1. Executando o Backend (FastAPI)
-
-# Acesse a pasta do backend
-cd backend
-
-# Crie e ative um ambiente virtual
+```bash
+cd Tarefa05/backend
 python -m venv venv
-# Windows:
-venv\Scripts\activate
-# Linux/macOS:
-source venv/bin/activate
-
-# Instale as dependências
+# Windows: venv\Scripts\activate   |   Linux/macOS: source venv/bin/activate
 pip install -r requirements.txt
 
-# Inicie o servidor de desenvolvimento
+# Cria/popula o banco (necessário antes de iniciar a API)
+python -m app.seed
+# Para apagar e recriar os dados: python -m app.seed --reset
+
 uvicorn app.main:app --reload
+```
 
+API em `http://localhost:8000` e Swagger UI em `http://localhost:8000/docs`.
 
-A API estará disponível em http://localhost:8000 e a documentação interativa (Swagger UI) em http://localhost:8000/docs.
+Para rodar os testes (usam um banco SQLite temporário, sem afetar o banco local):
 
-2. Executando o Frontend (React PWA)
+```bash
+pip install -r requirements-dev.txt
+python -m pytest -q
+```
 
-# Em outro terminal, acesse a pasta do frontend
-cd frontend
+### 2. Frontend (React PWA)
 
-# Instale as dependências
+```bash
+cd Tarefa05/frontend
 npm install
-
-# Inicie o servidor de desenvolvimento
 npm run dev
+```
 
+Aplicação em `http://localhost:5173`. Use o modo responsivo do navegador (F12) para simular um smartphone.
 
-A aplicação estará acessível em http://localhost:5173. (Dica: utilize o modo de visualização responsiva do navegador — DevTools F12 — para simular a tela de um smartphone).
+Para apontar o front para outro host da API, defina `VITE_API_URL` (padrão: `http://localhost:8000`).
 
-🔄 Fluxo de Contribuição (Git Flow Simplificado)
+### Fluxo de uma venda
 
-Para manter a organização entre os integrantes do grupo:
+1. No PDV, toque nos produtos para montar o carrinho.
+2. Toque em **Fechar Pedido**, escolha a forma de pagamento e confirme.
+3. O backend debita os insumos da ficha técnica e grava a venda.
+4. O toast **“Venda confirmada! Insumos debitados”** aparece e a aba Estoque é atualizada.
 
-Crie uma branch a partir da main ou develop para sua tarefa:
+## 🔄 Fluxo de contribuição
 
+```bash
 git checkout -b feature/nome-da-funcionalidade
-
-
-Realize commits claros e objetivos:
-
-git commit -m "feat: adiciona endpoint de baixa automatica de estoque"
-
-
-Envie sua branch e abra um Pull Request para revisão dos colegas:
-
+git commit -m "feat: adiciona endpoint de baixa automática de estoque"
 git push origin feature/nome-da-funcionalidade
+# Abrir Pull Request para revisão do grupo
+```
 
+## 👥 Integrantes — Grupo 40
 
-👥 Integrantes — Grupo 40
+Felipe de Carvalho Reinaldo · Felipe Pamplona Antunes Tremea · Gabriel da Silva Santos · Guilherme Rocha Ribas · Hugo Dutra Gomes · Joao Victor Ferreira Oliveira · Laura Luciano Cabral · Marco Antonio Negromonte Guimarães
 
-Felipe de Carvalho Reinaldo
+## 📄 Licença
 
-Felipe Pamplona Antunes Tremea
-
-Gabriel da Silva Santos
-
-Guilherme Rocha Ribas
-
-Hugo Dutra Gomes
-
-Joao Victor Ferreira Oliveira
-
-Laura Luciano Cabral
-
-Marco Antonio Negromonte Guimarães
-
-📄 Licença
-
-Este projeto foi desenvolvido para fins acadêmicos no âmbito do Projeto Integrador do Centro Universitário Senac.
+Projeto desenvolvido para fins acadêmicos no âmbito do Projeto Integrador do Centro Universitário Senac.
